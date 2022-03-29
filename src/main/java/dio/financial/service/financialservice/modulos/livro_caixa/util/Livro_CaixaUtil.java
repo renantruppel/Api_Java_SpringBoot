@@ -9,9 +9,9 @@ public class Livro_CaixaUtil {
 
     public boolean validarLivro_Caixa(Livro_Caixa l) {
 
-        String operacao = String.valueOf(l.getTipo());
+        char tipo = Character.toLowerCase(l.getTipo());
 
-        if(operacao.toLowerCase() != "d" && operacao.toLowerCase() != "c") {
+        if(tipo != 'd' && tipo != 'c') {
             return false;
         }
         return true;

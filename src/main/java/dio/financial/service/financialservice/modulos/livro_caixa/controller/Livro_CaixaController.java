@@ -18,6 +18,7 @@ public class Livro_CaixaController {
     @Autowired
     private Livro_CaixaService livro_caixaService;
 
+    @Autowired
     private Livro_CaixaUtil livro_caixaUtil;
 
     @PostMapping
@@ -26,8 +27,10 @@ public class Livro_CaixaController {
 
         try {
             if(livro_caixaUtil.validarLivro_Caixa(livro) == false) {
+                //System.out.println("ok");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
+            //System.out.println("ok");
             return livro_caixaService.novoLancamento(livro);
         }
         catch(Exception e) {

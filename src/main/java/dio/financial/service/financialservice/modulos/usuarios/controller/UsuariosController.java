@@ -4,9 +4,11 @@ import dio.financial.service.financialservice.modulos.usuarios.Entities.Usuarios
 import dio.financial.service.financialservice.modulos.usuarios.dtos.DisplayUsuarioDto;
 import dio.financial.service.financialservice.modulos.usuarios.service.UsuariosLoginService;
 import dio.financial.service.financialservice.modulos.usuarios.service.UsuariosService;
+import dio.financial.service.financialservice.modulos.usuarios.util.EncriptarSenhaUsuarios;
 import dio.financial.service.financialservice.modulos.usuarios.util.UsuariosUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,17 +30,16 @@ public class UsuariosController {
 
     @PostMapping
     public @ResponseBody
-    DisplayUsuarioDto novoUsuario(Usuarios u) {
+    Usuarios novoUsuario(Usuarios u) {
 
         try {
             if(usuariosUtil.validateUsuario(u) == false) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
-            DisplayUsuarioDto d = new DisplayUsuarioDto(usuariosService.novoUsuario(u));
-            return d;
+            return usuariosService.novoUsuario(u);
         }
         catch(Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -113,17 +114,17 @@ public class UsuariosController {
     @GetMapping(path = "/login")
     public String checarLogin(@RequestParam(value = "login") String login,
                               @RequestParam(value = "senha") String senha) {
-        System.out.println("ok" + login + senha);
+
         try {
-            System.out.println(login + senha);
             Usuarios usuario = loginService.checarLogin(login, senha);
             if(usuario != null) {
+                System.out.println("ok3");
                 return "Usuario conectado";
             }
-        }
-        catch(Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

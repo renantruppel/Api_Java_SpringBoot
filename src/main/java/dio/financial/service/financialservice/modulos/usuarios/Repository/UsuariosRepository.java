@@ -19,7 +19,7 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, Integer> {
     @Query("Select c from Clientes c where c.nome = :nome and c.cpf_cnpj = :cpf_cnpj and c.cidade = :cidade and c.uf = :uf")
     Usuarios listarPorFiltros(String nome, String email);*/
 
-    @Query("select u from Usuarios u where u.login = :login and u.senha = :senha")
-    Usuarios FindByAccount(String login, String senha);
+    @Query("select u from Usuarios u where u.login = :login")
+    Usuarios FindByAccount(String login);
 
 }

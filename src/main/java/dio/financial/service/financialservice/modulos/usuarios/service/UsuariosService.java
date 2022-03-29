@@ -6,6 +6,7 @@ import dio.financial.service.financialservice.modulos.usuarios.Entities.Usuarios
 import dio.financial.service.financialservice.modulos.usuarios.Repository.UsuariosListarPorFiltrosRepository;
 import dio.financial.service.financialservice.modulos.usuarios.Repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +22,19 @@ public class UsuariosService {
     @Autowired
     private UsuariosListarPorFiltrosRepository listarPorFiltrosRepository;
 
+    @Autowired
+    private final PasswordEncoder encoder;
+
+    public UsuariosService(PasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
+
     public Usuarios novoUsuario(Usuarios usuario) {
 
         if(usuario.getStatus() != 'a' && usuario.getStatus() != 'c') {
             usuario.setStatus('a');
         }
+        usuario.setSenha(encoder.encode(usuario.getSenha()));
         Usuarios u = usuariosRepository.save(usuario);
         return u;
     }
